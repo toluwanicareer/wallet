@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Mirrored from bootstraplovers.com/templates/assan-v2.5/admin/default-admin/page-empty.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Jan 2017 14:32:15 GMT -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <title>Xenos admin</title>
+
+        <!-- Bootstrap -->
+        <link href="{% static 'assets/plugins/bootstrap/css/bootstrap.min.css' %} " rel="stylesheet">
+        <!--side menu plugin-->
+        <link href="{% static 'assets/plugins/hoe-nav/hoe.css' %}" rel="stylesheet ">
+        <!-- icons-->
+        <link href="{% static 'assets/plugins/ionicons/css/ionicons.min.css' %}" rel="stylesheet">
+        <link href="{% static 'assets/plugins/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+        <!--template custom css file-->
+        <link href="{% static 'assets/css/style.css'%} " rel="stylesheet">
+        <link href="{% static 'assets/plugins/dropzone/dropzone.css' %} " rel="stylesheet">
+
+        <script src="{% static 'assets/js/modernizr.js' %}"></script>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body hoe-navigation-type="vertical" hoe-nav-placement="left" theme-layout="wide-layout">
+
+        <!--side navigation start-->
+        <div id="hoeapp-wrapper" class="hoe-hide-lpanel" hoe-device-type="desktop">
+            <header id="hoe-header" hoe-lpanel-effect="shrink">
+                <div class="hoe-left-header">
+                    <a href="#"> X<span>ENOS</span></a>
+                    <span class="hoe-sidebar-toggle"><a href="#"></a></span>
+                </div>
+
+                <div class="hoe-right-header" hoe-position-type="relative">
+                    <span class="hoe-sidebar-toggle"><a href="#"></a></span>
+
+                    <ul class="right-navbar navbar-right">
+
+
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="dropdown-toggle"><img src="assets/images/avtar.png" alt="" width="30" class="img-circle"> {{request.user.first_name}}</a>
+                            <ul class="dropdown-menu dropdown-menu-scale user-dropdown">
+
+                                <li><a href="#"><i class="ion-person"></i> Profile </a></li>
+                                <li><a href="#"><i class="ion-settings"></i> Settings <span class="label label-primary">3/9</span></a></li>
+
+                                <li><a href="#"><i class="ion-log-out"></i> Logout </a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </header>
+            <div id="hoeapp-container" hoe-color-type="lpanel-bg7" hoe-lpanel-effect="shrink">
+                <aside id="hoe-left-panel" hoe-position-type="absolute">
+
+                    <ul class="nav panel-list">
+
+                        <li>
+                            <a href="/office/">
+                                <i class="fa fa-home"></i>
+                                <span class="menu-text">Invest</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="/office/profile">
+                                <i class="fa fa-user"></i>
+                                <span class="menu-text">Profile</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+
+
+
+                         <li>
+                            <a href="/account/logout/">
+                                <i class="fa fa-key"></i>
+                                <span class="menu-text">Logout</span>
+                                <span class="selected"></span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </aside><!--aside left menu end-->
+
+
+                <!--start main content-->
+                <section id="main-content">
+                    <div class="space-30"></div>
+                    {% block content %}{% endblock %}
+                    <!--footer start-->
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <span>&copy; Copyright 2016. Assan</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!--footer end-->
+                </section><!--end main content-->
+            </div>
+        </div><!--end wrapper-->
+
+
+
+        <!--Common plugins-->
+        <script src="{% static 'assets/plugins/jquery/dist/jquery.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/hoe-nav/hoe.js' %}"></script>
+        <script src="{% static 'assets/plugins/pace/pace.min.js' %}"></script>
+        <script src="{% static 'assets/plugins/slimscroll/jquery.slimscroll.min.js' %}"></script>
+        <script src="{% static 'assets/js/app.js' %}"></script>
+         {% block scripts %}
+
+        {%endblock %}
+    </body>
+
+<!-- Mirrored from bootstraplovers.com/templates/assan-v2.5/admin/default-admin/page-empty.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 04 Jan 2017 14:32:15 GMT -->
+</html>

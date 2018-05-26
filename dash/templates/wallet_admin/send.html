@@ -1,0 +1,66 @@
+{% extends 'wallet_admin/base.html' %}
+{% load static %}
+{% block content %}
+
+ <div class="container">
+     <div class="row">
+          <div class="col-sm-7">
+                                <div class="panel">
+                                    <header class="panel-heading">
+                                        <div class="panel-actions">
+                                            <a href="#" class="panel-action panel-action-toggle" data-panel-toggle=""></a>
+                                            <a href="#" class="panel-action panel-action-dismiss" data-panel-dismiss=""></a>
+                                        </div>
+                                        <h2 class="panel-title">Send {{coin}}  <span class="helping-text"></span></h2>
+
+                                    </header>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-12 ">
+                                                <form method="post">
+                                                    {% csrf_token %}
+                                                <div class="form-group">
+
+                                                    <label>Address</label>
+                                                    <input name="address" type="text" class="form-control">
+                                                </div>
+                                                 <div class="form-group">
+                                                    <label>Amount</label>
+                                                    <input  step="0.00001" name="amount" type="number" class="form-control">
+                                                     <input type="hidden" name="coin_symbol" value="{{coin_symbol}}">
+                                                </div>
+
+                                                <button type="submit" class="btn btn-dark">Done</button>
+                                                </form>
+                                                </div>
+                                            </div>
+                                             <div class="col-md-4">
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+          </div>
+     </div>
+ </div>
+
+{% endblock %}
+{% block scripts %}
+<script>
+    //&amount=0.005
+
+    $( ".js-amount" ).change(function() {
+        url='https://chart.googleapis.com/chart?chs=250x250&cht=qr&chl=bitcoin:{{address}}';
+        amount=$(this).val();
+        url=url+'&amount='+amount
+        console.log(url)
+ $.get(url, function(){}).done(function(data){
+     console.log(data)
+ })
+ $('#qr').attr('src',url)
+});
+</script>
+
+
+        {%endblock %}

@@ -142,3 +142,7 @@ LOGIN_URL='/account/login/'
 
 BTC='btc'
 TOKEN='993d49173a32400eba3aaafd8b94d336'
+
+STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')

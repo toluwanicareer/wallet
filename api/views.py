@@ -51,9 +51,12 @@ def LoginView(request):
     return JsonResponse(response)
 
 def dash(request):
-    eth = get_wallet('eth', request.user)
-    btc = get_wallet('btc', request.user)
-    manna = get_wallet('MAN', request.user)
+
+    id=request.GET.get('id')
+    user=User.objects.get(id=id)
+    eth = get_wallet('eth', user)
+    btc = get_wallet('btc', user)
+    manna = get_wallet('MAN', user)
     rate=Rate.objects.get(id=1)
     try:
         eth_dollar=eth.main_balance/rate.eth

@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from dash.models import Wallet
 from django.db.models import Q
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -46,12 +47,56 @@ def LoginView(request):
     return JsonResponse(response)
 
 
+@csrf_exempt
+def signupView(request):
+    payload = request.body.decode("utf-8")
+    data = json.loads(payload)
+    response = {'status': 400}
+    username=data.get('username')
+    firstname=data.get('firstname')
+    lastname=data.get('lastname')
+    password=data.get('password')
+    email=data.get('email')
+    status=chk_email(email)
+    if status:# email does not exist
+        try:
+            user=User.objects.get(username=username)
+
+            response['message'] = 'Username already exist'
+        except User.DoesNotExist:
+
+            #create user
+            user=User.objects.create_user(username=username, is_active=True,password=password,
+                                          first_name=firstname, last_name=lastname, email=email)
+            response['status']=200
+            response['message']='Successful Account created for firstname'
+
+    else:
+        response['message'] = 'Email already exist'
+
+    return JsonResponse(response)
+
+
+
+
+
+
+
 
 
 
 def get_wallet(wallet, user):
     wallet = Wallet.objects.get(Q(owner=user), coin=wallet)
     return wallet
+
+def chk_email(email):
+    user=User.objects.filter(email=email)
+    if user.exists():
+        return False
+    else:
+        return True
+
+
 
 '''
  'wallets': [{'eth_balance':eth.main_balance,

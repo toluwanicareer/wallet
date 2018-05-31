@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'account',
     'django.contrib.sites',
     'main',
+    'corsheaders',
     'api',
+
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'walletapp.urls'
@@ -158,3 +161,4 @@ WEBHOOK_URL='https://webhook.site/599dea4b-8ac9-4c2e-a400-2c9966c9aacf'#'http://
 WEI=1000000000000000000
 
 
+CORS_ORIGIN_ALLOW_ALL =True

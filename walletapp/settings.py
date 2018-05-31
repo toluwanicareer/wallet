@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'acc',
     'account',
     'django.contrib.sites',
+    'main',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -141,8 +143,18 @@ ACCOUNT_LOGIN_REDIRECT_URL='/'
 LOGIN_URL='/account/login/'
 
 BTC='btc'
+#https://api.blockcypher.com/v1/eth/main/contracts/9b03d6b95bb730d1be29658f6b879ecf6c1c64a8/totalSupply ?token=993d49173a32400eba3aaafd8b94d336
 TOKEN='993d49173a32400eba3aaafd8b94d336'
 
 STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+ETH='beth'
+ETHNETWORK='test'
+CALLBACK_URL='hook/callback/monitor_transaction'
+WEBHOOK_URL='https://webhook.site/599dea4b-8ac9-4c2e-a400-2c9966c9aacf'#'http://tolucareer.pythonanywhere.com/'+CALLBACK_URL
+
+WEI=1000000000000000000
+
+

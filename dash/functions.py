@@ -3,29 +3,60 @@ from blockcypher import simple_spend, create_wallet_from_address, get_wallet_add
     add_address_to_wallet, create_unsigned_tx, simple_spend_p2sh,  make_tx_signatures
 import time
 from django.conf import settings
+
 import pdb
 
-#14tmXRFucqDG96SmhLRRYZtQzvH1b4zfCv
+#6b0b2b312b418de3edc4c04c1440fe697b26aee6
 
 def generate_address(coin_symbol, network):
     url = 'https://api.blockcypher.com/v1/'+coin_symbol+'/'+network+'/addrs'
     response = requests.post(url)
 
+
     #print(response)
     return response.json()
 
+def subscribe_to_webhook(coin_symbol, network, addr):
+    data={"event": "confirmed-tx", "address": addr, "url": settings.WEBHOOK_URL }
+    url='https://api.blockcypher.com/v1/'+coin_symbol+'/'+network+'/hooks'
+    response=requests.post(url, params={'token':settings.TOKEN}, json=data,verify=True)
+
+
+
+
+
+
+def broadcast_eth_transaction(tx, sig, public_key):
+    data = tx.copy()
+    url='https://api.blockcypher.com/v1/'+settings.ETH+'/'+settings.ETHNETWORK+'/txs/send'
+    data['signatures'] = sig
+    data['pubkeys'] = public_key
+    params = {'token': settings.TOKEN}
+    r = requests.post(url, params=params, json=data, verify=True )
+    #pdb.set_trace()
+    return r.json()
 
 def create_eth_transaction(input_addr, output_addr, value):
-    url='https://api.blockcypher.com/v1/eth/main/txs/new?token='+settings.TOKEN
+    url='https://api.blockcypher.com/v1/'+settings.ETH+'/'+settings.ETHNETWORK+'/txs/new'
     tx={"inputs":
             [{"addresses":
                   [input_addr]}],
         "outputs":
             [{"addresses":
                   [output_addr], "value": value}]}
-    response=requests.post(url, data=tx)
+    response=requests.post(url, json=tx, params={'token':settings.TOKEN}, verify=True)
     pdb.set_trace()
     return response.json()
+
+
+def create_eth_wallet(wallet_status,username,address):
+    if not wallet_status:
+
+        url='https://api.blockcypher.com/v1/' + settings.ETH + '/' + settings.ETHNETWORK +'/wallets'
+        wallet={"name": 'ethtolu',"addresses": [address]}
+        response=requests.post(url, json=wallet, params={'token':settings.TOKEN}, verify=True)
+    return True
+
 
 
 def create_transaction(username,addr,amount, coin_symbol):

@@ -4,11 +4,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import  Wallet, Address, Transaction
 from django.http import Http404, HttpResponseRedirect
 from django.db.models import Q
-from .functions import create_transaction, create_eth_transaction
+from .functions import create_transaction, create_eth_transaction,broadcast_eth_transaction
 import pdb
 from django.conf import settings
 from django.contrib import messages
-from blockcypher import make_tx_signatures, broadcast_signed_transaction
+from blockcypher import make_tx_signatures, broadcast_signed_transaction, subscribe_to_address_webhook
 import json
 # Create your views here.
 
@@ -19,25 +19,27 @@ class WalletView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         coin_symbol=kwargs.pop('coin_symbol')
         try:
-            wallet=Wallet.objects.get(Q(owner=request.user), coin__icontains=coin_symbol)
-            balance=get_balance(wallet)
+            wallet=Wallet.objects.get(Q(owner=request.user), coin=coin_symbol)
+            balance=wallet.main_balance
+            coin_balance=balance/settings.WEI
         except Wallet.DoesNotExist:
             raise Http404()
         addr=Address.objects.filter(wallet=wallet)
 
 
-        return render(request, 'wallet_admin/wallet.html', {'addr':addr,'coin_symbol':coin_symbol})
+        return render(request, 'wallet_admin/wallet.html', {'addr':addr,'coin_symbol':coin_symbol,
+                                                            'balance':balance, 'coin_balance':coin_balance})
 
 class generate_address(LoginRequiredMixin, View):
 
     def get(self,request, *args, **kwargs):
         coin_symbol=request.GET.get('coin_symbol')
-        wallet = Wallet.objects.get(Q(owner=request.user), coin__icontains=coin_symbol)
-        if wallet.coin == 'eth':
-            eth_address=wallet.address_set.all()
-            if eth_address.exists():
-                messages.warning(request, 'You can only manage one wallet address in ETH')
-                return HttpResponseRedirect('/office/wallet/'+coin_symbol+'/')
+        wallet = Wallet.objects.get(Q(owner=request.user), coin=coin_symbol)
+        #if wallet.coin == 'eth' or wallet.coin == 'beth':
+            #eth_address=wallet.address_set.all()
+            #if eth_address.exists():
+            #messages.warning(request, 'You can only manage one wallet address in ETH')
+            #return HttpResponseRedirect('/office/wallet/'+coin_symbol+'/')
         addr=Address(wallet=wallet)
 
         addr=addr.set_up(request.user.username)
@@ -46,7 +48,7 @@ class generate_address(LoginRequiredMixin, View):
         else:
             messages.warning(request, "Network Error")
 
-        return HttpResponseRedirect('/office/')
+        return HttpResponseRedirect('/office/wallet/'+coin_symbol+'/')
 
 
 class receive_coin(LoginRequiredMixin, View):
@@ -69,17 +71,34 @@ class send_coin(LoginRequiredMixin, View):
         addr=request.POST.get('address')
         coin=request.POST.get('coin_symbol')
 
-        wallet = Wallet.objects.get(Q(owner=request.user), coin__icontains=coin)
+
+
+        wallet = Wallet.objects.get(Q(owner=request.user), coin=coin)
         addresses=wallet.address_set.all()
         #from_public_key=[key.public_key for key in addresses]
         #from_priv_key=[key.private_key_hex for key in addresses ]
+        if coin =='btc':
+            amount=int(float(amount)*100000000)
+        else:
+            amount=int(float(amount)*settings.WEI)
 
-        amount=int(float(amount)*100000000)
+        if coin == settings.ETH:
+            in_addr=addresses[0].address
+            tx=create_eth_transaction('1c58b7be11a43b19bdda8f0663ca1e44f4297b7b', addr, amount)
 
-        tx=create_transaction(request.user.username, addr, amount,coin)
+
+
+
+
+            #assert 'errors' not in tx
+
+        else:
+            tx=create_transaction(request.user.username, addr, amount,coin)
+        if 'errors' in tx:
+            messages.warning(request, 'Insufficient Balance ')
+            return HttpResponseRedirect('/office/wallet/' + coin + '/')
         str_tx=json.dumps(tx)
-        tr_obj=Transaction(data=str_tx)
-        tr_obj.save()
+
         pdb.set_trace()
         try:
             inputs=tx['tx']['inputs'][0]['addresses']
@@ -87,24 +106,25 @@ class send_coin(LoginRequiredMixin, View):
             messages.warning(request, 'Insufficient Balance ')
             return HttpResponseRedirect('/office/')
 
-        input_addr=addresses.filter(address__in=inputs )
+        input_addr=addresses.filter(address__in=inputs)
         public_key=[addr.public_key for addr in input_addr ]
         priv_key=[addr.private_key_hex for addr in input_addr]
-        pdb.set_trace()
+        #pdb.set_trace()
         signatures = make_tx_signatures(txs_to_sign=tx['tosign'], privkey_list=priv_key,
                                            pubkey_list=public_key)
 
-        tx_hash=broadcast_signed_transaction(unsigned_tx=tx, signatures=signatures, pubkeys=public_key, api_key=settings.TOKEN)
-        tr_obj.tx=tx_hash
-        tr_obj.save()
+        if coin == settings.ETH:
+            tx_hash=broadcast_eth_transaction(tx,signatures,public_key)
+        else:
+            tx_hash=broadcast_signed_transaction(unsigned_tx=tx, signatures=signatures, pubkeys=public_key, api_key=settings.TOKEN)
 
+        if 'errors' in tx_hash:
+            messages.warning(request, 'Insufficient Balance ')
+            return HttpResponseRedirect('/office/wallet/' + coin + '/')
 
-
-
-
-
+        messages.success(request, 'Transaction successfully created')
         #create_transaction(from_public_key, from_priv_key,addr,amount,coin,change_address.address)
-        return HttpResponseRedirect('/office/')
+        return HttpResponseRedirect('/office/wallet/' + coin + '/')
 
 
 

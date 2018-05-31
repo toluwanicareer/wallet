@@ -70,13 +70,8 @@ class send_coin(LoginRequiredMixin, View):
         amount=request.POST.get('amount')
         addr=request.POST.get('address')
         coin=request.POST.get('coin_symbol')
-
-
-
         wallet = Wallet.objects.get(Q(owner=request.user), coin=coin)
         addresses=wallet.address_set.all()
-        #from_public_key=[key.public_key for key in addresses]
-        #from_priv_key=[key.private_key_hex for key in addresses ]
         if coin =='btc':
             amount=int(float(amount)*100000000)
         else:
@@ -84,13 +79,7 @@ class send_coin(LoginRequiredMixin, View):
 
         if coin == settings.ETH:
             in_addr=addresses[0].address
-            tx=create_eth_transaction('1c58b7be11a43b19bdda8f0663ca1e44f4297b7b', addr, amount)
-
-
-
-
-
-            #assert 'errors' not in tx
+            tx=create_eth_transaction('f814981e49d8fc2c42c43143a575aeec4b000c34', addr, amount)
 
         else:
             tx=create_transaction(request.user.username, addr, amount,coin)

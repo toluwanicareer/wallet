@@ -7,4 +7,7 @@ app_name='api'
 urlpatterns = [
     path('account/login', views.LoginView, name='login'),
     path('account/signup', views.signupView, name='signup'),
+    path('dash', views.dash, name='dash'),
+    path('wallet/<str:coin_symbol>/', views.WalletView, name='match'),
+    path('wallet/<str:coin_symbol>/send_coin/', views.send_coin, name='send_coin')
     ]

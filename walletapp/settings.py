@@ -159,6 +159,10 @@ CALLBACK_URL='hook/callback/monitor_transaction'
 WEBHOOK_URL='https://webhook.site/599dea4b-8ac9-4c2e-a400-2c9966c9aacf'#'http://tolucareer.pythonanywhere.com/'+CALLBACK_URL
 
 WEI=1000000000000000000
+SATOSHI=100000000
 
 
 CORS_ORIGIN_ALLOW_ALL =True
+
+API_KEY='qLfg5C9hhnEWL9tt'
+API_SECRET='qMwSqeIiDqeLCitIFnUjitX5EcGVgghF'

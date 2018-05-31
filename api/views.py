@@ -15,7 +15,7 @@ from django.db.models import Q
 def LoginView(request):
 
     payload = request.body.decode("utf-8")
-    response = {'status': '400'}
+    response = {'status': 400}
 
     try:
         login_data = json.loads(payload)
@@ -26,13 +26,14 @@ def LoginView(request):
     username=login_data.get('username')
     password=login_data.get('password')
     user=authenticate(request,username=username, password=password)
-    eth=get_wallet('eth', user)
-    btc=get_wallet('btc', user)
-    manna=get_wallet('MAN', user)
+
     if user:
+        eth = get_wallet('eth', user)
+        btc = get_wallet('btc', user)
+        manna = get_wallet('MAN', user)
         #data = serializers.serialize('json', user, fields=('first_name', 'last_name', 'username', 'id'))
         data={'username':user.username, 'first_name':user.first_name, 'last_name':user.first_name, 'id':user.pk,
-              'wallet': [{'eth_balance':eth.main_balance,
+              'wallets': [{'eth_balance':eth.main_balance,
                           'coin_symbol':eth.coin,
                           'id':eth.id,
                           'name':'Ethereum' },
@@ -51,6 +52,7 @@ def LoginView(request):
 
     else:
         response['message']='Invalid Login'
+        response['status'] = 401
 
     return JsonResponse(response)
 

@@ -2,34 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e6e9879b-1976-4d9f-8678-6ddbe2a14267" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/api/urls.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/contract" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/templates/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/main/urls.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0002_auto_20180519_0906.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0003_auto_20180519_1521.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0004_auto_20180519_1817.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0005_address_balance.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0006_wallet_status.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0007_auto_20180520_1818.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0008_wallet_network.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0009_transaction.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0010_auto_20180523_0846.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0011_auto_20180523_0903.py" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/dash/migrations/0012_auto_20180524_1010.py" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/db.sqlite3" afterPath="$PROJECT_DIR$/db.sqlite3" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/functions.py" afterPath="$PROJECT_DIR$/dash/functions.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/migrations/0001_initial.py" afterPath="$PROJECT_DIR$/dash/migrations/0001_initial.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/models.py" afterPath="$PROJECT_DIR$/dash/models.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/templates/wallet_admin/base.html" afterPath="$PROJECT_DIR$/dash/templates/wallet_admin/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/templates/wallet_admin/send.html" afterPath="$PROJECT_DIR$/dash/templates/wallet_admin/send.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/templates/wallet_admin/wallet.html" afterPath="$PROJECT_DIR$/dash/templates/wallet_admin/wallet.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/dash/views.py" afterPath="$PROJECT_DIR$/dash/views.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/walletapp/settings.py" afterPath="$PROJECT_DIR$/walletapp/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/walletapp/urls.py" afterPath="$PROJECT_DIR$/walletapp/urls.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/api/views.py" afterPath="$PROJECT_DIR$/api/views.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -127,8 +100,8 @@
       <file leaf-file-name="views.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/api/views.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="281">
-              <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+            <state relative-caret-position="127">
+              <caret line="35" column="22" lean-forward="false" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
               <folding>
                 <element signature="e#0#35#0" expanded="true" />
               </folding>
@@ -942,8 +915,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/api/views.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="281">
-          <caret line="53" column="0" lean-forward="true" selection-start-line="53" selection-start-column="0" selection-end-line="53" selection-end-column="0" />
+        <state relative-caret-position="127">
+          <caret line="35" column="22" lean-forward="false" selection-start-line="35" selection-start-column="22" selection-end-line="35" selection-end-column="22" />
           <folding>
             <element signature="e#0#35#0" expanded="true" />
           </folding>

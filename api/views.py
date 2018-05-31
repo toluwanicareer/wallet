@@ -120,6 +120,12 @@ def signupView(request):
             user=User.objects.create_user(username=username, is_active=True,password=password,
                                           first_name=firstname, last_name=lastname, email=email)
             response['status']=200
+            wallet=Wallet(coin='btc', main_balance=0,owner=user, network='main')
+            wallet.save()
+            wallet = Wallet(coin='eth', main_balance=0, owner=user, network='main')
+            wallet.save()
+            wallet = Wallet(coin='MAN', main_balance=0, owner=user, network='main')
+            wallet.save()
             response['message']='Successful Account created for firstname'
 
     else:

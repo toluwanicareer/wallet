@@ -4,3 +4,5 @@ from django.db import models
 class test_model(models.Model):
     data=models.TextField()
     created_date=models.DateTimeField(auto_now_add=True)
+
+

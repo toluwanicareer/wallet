@@ -33,7 +33,7 @@ def broadcast_eth_transaction(tx, sig, public_key):
     data['pubkeys'] = public_key
     params = {'token': settings.TOKEN}
     r = requests.post(url, params=params, json=data, verify=True )
-    #pdb.set_trace()
+
     return r.json()
 
 def create_eth_transaction(input_addr, output_addr, value):
@@ -45,7 +45,7 @@ def create_eth_transaction(input_addr, output_addr, value):
             [{"addresses":
                   [output_addr], "value": value}]}
     response=requests.post(url, json=tx, params={'token':settings.TOKEN}, verify=True)
-    pdb.set_trace()
+
     return response.json()
 
 

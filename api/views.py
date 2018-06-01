@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 from django.core import serializers
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from dash.models import Wallet
+from dash.models import Wallet, Transaction
 from django.db.models import Q
 from django.contrib.auth.models import User
 from coinbase.wallet.client import Client
@@ -61,18 +61,22 @@ def dash(request):
     try:
         eth_dollar=eth.main_balance/rate.eth
         eth_dollar=eth_dollar/settings.WEI
+        eth_dollar = round(eth_dollar, 2)
     except:
         eth_dollar=0
     try:
         btc_dollar=btc.main_balance/rate.btc
-        btc_dollar = eth_dollar / settings.SATOSHI
+        btc_dollar =btc_dollar / settings.SATOSHI
+        btc_dollar=round(btc_dollar,2)
     except:
         btc_dollar=0
     try:
         manna_dollar=manna.main_balance/rate.manna
     except:
         manna_dollar=0
-    data={'wallets': [{'balance':eth.main_balance,
+    data={'status':200,
+          'message':'Successful',
+          'wallets': [{'balance':eth.main_balance,
                           'coin_symbol':eth.coin,
                           'id':eth.id,
                            'dollar':eth_dollar,
@@ -89,14 +93,6 @@ def dash(request):
                           'name': 'Manna'}
                          ]}
     return JsonResponse(data)
-
-
-
-
-
-
-
-
 
 @csrf_exempt
 def signupView(request):
@@ -136,14 +132,21 @@ def signupView(request):
 @csrf_exempt
 def WalletView(request, coin_symbol):
     wallet=get_wallet(coin_symbol,request.user)
-    if coin_symbol == 'eth':
+    transactions = list(Transaction.objects.filter(wallet=wallet).only('hash','amount').values()[:4])
+    #data = serializers.serialize("json", transactions, fields=('hash', 'amount', 'payin'))
+
+    #pdb.set_trace()
+    if coin_symbol =='eth': #settings.ETH:
         try:
             balance=wallet.main_balance/settings.WEI
+            balance=round(balance,2)
+
         except:
             balance=0
     if coin_symbol=='btc':
         try:
             balance = wallet.main_balance / settings.BTC
+            balance = round(balance, 2)
         except:
             balance = 0
     if coin_symbol=='MAN':
@@ -151,19 +154,9 @@ def WalletView(request, coin_symbol):
     data={'balance': balance,
      'coin_symbol': wallet.coin,
      'id': wallet.id,
+      'transactions':transactions,
           }
     return JsonResponse(data)
-
-
-
-
-
-
-
-
-
-
-
 
 def get_wallet(wallet, user):
     wallet = Wallet.objects.get(Q(owner=user), coin=wallet)
@@ -187,14 +180,14 @@ def send_coin(request,coin_symbol):
     addr=data.get('address')
     wallet = get_wallet(coin_symbol, request.user)
     addresses = wallet.address_set.all()
-    if coin == 'btc':
+    if coin == settings.BTC:
         amount = int(float(amount) * settings.BTC)
-    if coin == 'eth':
+    if coin == settings.ETH:
         amount = int(float(amount) * settings.WEI)
 
     if coin == settings.ETH:
         in_addr = addresses[0].address
-        tx = create_eth_transaction('1c58b7be11a43b19bdda8f0663ca1e44f4297b7b', addr, amount)
+        tx = create_eth_transaction('f814981e49d8fc2c42c43143a575aeec4b000c34', addr, amount)
 
     else:
         tx = create_transaction(request.user.username, addr, amount, coin)
@@ -203,13 +196,11 @@ def send_coin(request,coin_symbol):
         return JsonResponse(response)
     str_tx = json.dumps(tx)
 
-    pdb.set_trace()
     try:
         inputs = tx['tx']['inputs'][0]['addresses']
     except:
         response['message'] = 'Insufficient Balance'
         return JsonResponse(response)
-
     input_addr = addresses.filter(address__in=inputs)
     public_key = [addr.public_key for addr in input_addr]
     priv_key = [addr.private_key_hex for addr in input_addr]
@@ -224,10 +215,11 @@ def send_coin(request,coin_symbol):
                                                api_key=settings.TOKEN)
 
     if 'errors' in tx_hash:
+        pdb.set_trace()
         response['message'] = 'Insufficient Balance'
         return JsonResponse(response)
 
-    response['message']='Transaction successfully created'
+    response['message']='Transaction successfully created1'
     response['status']=200
     response['tx_hash']=tx_hash
     return JsonResponse(response)

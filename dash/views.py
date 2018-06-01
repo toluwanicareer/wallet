@@ -86,9 +86,9 @@ class send_coin(LoginRequiredMixin, View):
         if 'errors' in tx:
             messages.warning(request, 'Insufficient Balance ')
             return HttpResponseRedirect('/office/wallet/' + coin + '/')
-        str_tx=json.dumps(tx)
 
         pdb.set_trace()
+
         try:
             inputs=tx['tx']['inputs'][0]['addresses']
         except :
@@ -104,6 +104,7 @@ class send_coin(LoginRequiredMixin, View):
 
         if coin == settings.ETH:
             tx_hash=broadcast_eth_transaction(tx,signatures,public_key)
+            #pdb.set_trace()
         else:
             tx_hash=broadcast_signed_transaction(unsigned_tx=tx, signatures=signatures, pubkeys=public_key, api_key=settings.TOKEN)
 
@@ -115,7 +116,7 @@ class send_coin(LoginRequiredMixin, View):
         #create_transaction(from_public_key, from_priv_key,addr,amount,coin,change_address.address)
         return HttpResponseRedirect('/office/wallet/' + coin + '/')
 
-
+#35c4ef3023c07eae7d9b6288dcbac142bc9fc8d3ba0af454732b13c35f22bd6c
 
 
 

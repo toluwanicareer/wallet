@@ -131,7 +131,7 @@ def signupView(request):
 
     return JsonResponse(response)
 
-@csrf_exempt
+
 def WalletView(request, coin_symbol):
     rate = Rate.objects.get(id=1)
     user=get_user(request)

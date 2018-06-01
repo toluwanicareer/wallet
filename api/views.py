@@ -14,6 +14,7 @@ from .models import Rate
 from django.conf import settings
 from dash.functions import broadcast_eth_transaction, create_eth_transaction,create_transaction
 from blockcypher import make_tx_signatures, broadcast_signed_transaction
+from dash.models import Address
 import requests
 
 
@@ -74,6 +75,7 @@ def dash(request):
         manna_dollar=manna.main_balance/rate.manna
     except:
         manna_dollar='0'
+        #remember to do shit with zeros
     data={'status':200,
           'message':'Successful',
           'wallets': [{'balance':eth.main_balance,
@@ -131,12 +133,13 @@ def signupView(request):
 
 @csrf_exempt
 def WalletView(request, coin_symbol):
-    wallet=get_wallet(coin_symbol,request.user)
-    transactions = list(Transaction.objects.filter(wallet=wallet).only('hash','amount').values()[:4])
+    user=get_user(request)
+    wallet=get_wallet(coin_symbol,user)
+    transactions = list(Transaction.objects.only('hash','amount').filter(wallet=wallet).values()[:4])
     #data = serializers.serialize("json", transactions, fields=('hash', 'amount', 'payin'))
 
     #pdb.set_trace()
-    if coin_symbol =='eth': #settings.ETH:
+    if coin_symbol ==settings.ETH:
         try:
             balance=wallet.main_balance/settings.WEI
             balance=round(balance,2)
@@ -172,13 +175,14 @@ def chk_email(email):
 
 @csrf_exempt
 def send_coin(request,coin_symbol):
+    user=get_user(request)
     payload = request.body.decode("utf-8")
     data = json.loads(payload)
     response = {'status': 400}
     coin=coin_symbol
     amount=data.get('amount')
     addr=data.get('address')
-    wallet = get_wallet(coin_symbol, request.user)
+    wallet = get_wallet(coin_symbol, user)
     addresses = wallet.address_set.all()
     if coin == settings.BTC:
         amount = int(float(amount) * settings.BTC)
@@ -187,7 +191,7 @@ def send_coin(request,coin_symbol):
 
     if coin == settings.ETH:
         in_addr = addresses[0].address
-        tx = create_eth_transaction('f814981e49d8fc2c42c43143a575aeec4b000c34', addr, amount)
+        tx = create_eth_transaction(in_addr, addr, amount)
 
     else:
         tx = create_transaction(request.user.username, addr, amount, coin)
@@ -224,6 +228,40 @@ def send_coin(request,coin_symbol):
     response['tx_hash']=tx_hash
     return JsonResponse(response)
 
+def receive_coin(request, coin_symbol):
+    response={'status':400}
+    user=get_user(request)
+    wallet = get_wallet(coin_symbol, user)
+    if coin_symbol== settings.BTC:
+
+        addr = Address(wallet=wallet)
+        addr = addr.set_up(user.username)
+        if addr:
+            response['message']='Address created successfully'
+            response['status']=200
+            response['data']={'address':addr }
+        else:
+
+            response['message'] = 'Network Error'
+    if coin_symbol==settings.ETH:
+        addr=wallet.address_set.all()
+        if addr.exists():
+            addr = addr[0]
+            response['data'] = {'address': addr}
+            response['message'] = 'Address created successfully'
+        else:
+            addr = Address(wallet=wallet)
+            addr = addr.set_up(user.username)
+            response['data'] = {'address': addr}
+            response['message'] = 'Address created successfully'
+
+
+
+
+        #return JsonResponse(response)
+
+
+
 def get_dollar_value(eth_balance, btc_balance):
     cl=Client(settings.API_KEY, settings.API_SECRET)
     currencies = cl.get_exchange_rates(currency='USD')
@@ -232,7 +270,10 @@ def get_dollar_value(eth_balance, btc_balance):
     pdb.set_trace()
 
 
-
+def get_user(req):
+    id = req.GET.get('id')
+    user = User.objects.get(id=id)
+    return user
 
 
 

@@ -63,7 +63,7 @@ class Address(models.Model):
             self.wallet.save()
 
 
-        return True
+        return address
 
 
 class Transaction(models.Model):

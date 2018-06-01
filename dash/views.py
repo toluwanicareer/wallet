@@ -41,13 +41,11 @@ class generate_address(LoginRequiredMixin, View):
             #messages.warning(request, 'You can only manage one wallet address in ETH')
             #return HttpResponseRedirect('/office/wallet/'+coin_symbol+'/')
         addr=Address(wallet=wallet)
-
         addr=addr.set_up(request.user.username)
         if addr:
             messages.success(request, 'Address created succeefully')
         else:
             messages.warning(request, "Network Error")
-
         return HttpResponseRedirect('/office/wallet/'+coin_symbol+'/')
 
 

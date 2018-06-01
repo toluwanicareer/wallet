@@ -252,13 +252,17 @@ def receive_coin(request, coin_symbol):
         else:
             addr = Address(wallet=wallet)
             addr = addr.set_up(user.username)
-            response['data'] = {'address': addr}
-            response['message'] = 'Address created successfully'
+            if addr:
+                response['message'] = 'Address created successfully'
+                response['status'] = 200
+                response['data'] = {'address': addr}
+            else:
+                response['message'] = 'Network Error'
 
 
 
 
-        #return JsonResponse(response)
+        return JsonResponse(response)
 
 
 

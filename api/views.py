@@ -133,6 +133,7 @@ def signupView(request):
 
 @csrf_exempt
 def WalletView(request, coin_symbol):
+    rate = Rate.objects.get(id=1)
     user=get_user(request)
     wallet=get_wallet(coin_symbol,user)
     transactions = list(Transaction.objects.only('hash','amount').filter(wallet=wallet).values()[:4])
@@ -143,23 +144,30 @@ def WalletView(request, coin_symbol):
         try:
             balance=wallet.main_balance/settings.WEI
             balance=round(balance,2)
+            dollar=balance/rate.eth
 
         except:
             balance=0
-    if coin_symbol=='btc':
+            dollar=0
+    if coin_symbol==settings.BTC:
         try:
             balance = wallet.main_balance / settings.BTC
             balance = round(balance, 2)
+            dollar=balance/rate.eth
         except:
             balance = 0
+            dollar =0
     if coin_symbol=='MAN':
         balance=wallet.main_balance
+        dollar=0
     data={'balance': balance,
      'coin_symbol': wallet.coin,
      'id': wallet.id,
+      'dollar':dollar,
       'transactions':transactions,
           'status':200,
           'message':'Successful'
+
 
           }
     return JsonResponse(data)
@@ -242,14 +250,21 @@ def receive_coin(request, coin_symbol):
         if addr:
             response['message']='Address created successfully'
             response['status']=200
-            response['data']={'address':addr }
+            response['data']={'address':addr}
         else:
-
-            response['message'] = 'Network Error'
+            addr = wallet.address_set.all()
+            if addr.exists():
+                addr = addr[0].address
+                response['status'] = 200
+                response['data'] = {'address': addr}
+                response['message'] = 'Address created successfully'
+            else:
+                response['message'] = 'Network Error'
     if coin_symbol==settings.ETH:
         addr=wallet.address_set.all()
         if addr.exists():
-            addr = addr[0]
+            addr = addr[0].address
+            response['status'] = 200
             response['data'] = {'address': addr}
             response['message'] = 'Address created successfully'
         else:
@@ -265,7 +280,7 @@ def receive_coin(request, coin_symbol):
 
 
 
-        return JsonResponse(response)
+    return JsonResponse(response)
 
 
 

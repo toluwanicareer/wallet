@@ -144,7 +144,7 @@ def WalletView(request, coin_symbol):
         try:
             balance=wallet.main_balance/settings.WEI
             balance=round(balance,2)
-            dollar=balance/rate.eth
+            dollar=round(balance/rate.eth, 2)
 
         except:
             balance=0
@@ -153,7 +153,7 @@ def WalletView(request, coin_symbol):
         try:
             balance = wallet.main_balance / settings.BTC
             balance = round(balance, 2)
-            dollar=balance/rate.eth
+            dollar=round(balance/rate.eth,2)
         except:
             balance = 0
             dollar =0

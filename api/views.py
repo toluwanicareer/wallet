@@ -63,17 +63,17 @@ def dash(request):
         eth_dollar=eth_dollar/settings.WEI
         eth_dollar = round(eth_dollar, 2)
     except:
-        eth_dollar=0
+        eth_dollar='0'
     try:
         btc_dollar=btc.main_balance/rate.btc
         btc_dollar =btc_dollar / settings.SATOSHI
         btc_dollar=round(btc_dollar,2)
     except:
-        btc_dollar=0
+        btc_dollar='0'
     try:
         manna_dollar=manna.main_balance/rate.manna
     except:
-        manna_dollar=0
+        manna_dollar='0'
     data={'status':200,
           'message':'Successful',
           'wallets': [{'balance':eth.main_balance,

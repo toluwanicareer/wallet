@@ -153,7 +153,7 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-ETH='eth'
+ETH='beth'
 ETHNETWORK='test'
 CALLBACK_URL='hook/callback/monitor_transaction'
 WEBHOOK_URL='https://webhook.site/599dea4b-8ac9-4c2e-a400-2c9966c9aacf'#'http://tolucareer.pythonanywhere.com/'+CALLBACK_URL

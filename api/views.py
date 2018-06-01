@@ -158,6 +158,9 @@ def WalletView(request, coin_symbol):
      'coin_symbol': wallet.coin,
      'id': wallet.id,
       'transactions':transactions,
+          'status':200,
+          'message':'Successful'
+
           }
     return JsonResponse(data)
 

@@ -72,20 +72,20 @@ def dash(request):
         manna_dollar=manna.main_balance/rate.manna
     except:
         manna_dollar=0
-    data={'wallets': [{'eth_balance':eth.main_balance,
+    data={'wallets': [{'balance':eth.main_balance,
                           'coin_symbol':eth.coin,
                           'id':eth.id,
-                           'eth_dollar':eth_dollar,
+                           'dollar':eth_dollar,
                           'name':'Ethereum' },
-                         {'btc_balance': btc.main_balance,
+                         {'balance': btc.main_balance,
                           'coin_symbol': btc.coin,
                           'id': btc.id,
-                          'btc_dollar':btc_dollar,
+                          'dollar':btc_dollar,
                           'name': 'Bitcoin'},
-                         {'manna_balance': manna.main_balance,
+                         {'balance': manna.main_balance,
                           'coin_symbol': manna.coin,
                           'id': btc.id,
-                          'manna_dollar':manna_dollar,
+                          'dollar':manna_dollar,
                           'name': 'Manna'}
                          ]}
     return JsonResponse(data)
@@ -231,12 +231,6 @@ def send_coin(request,coin_symbol):
     response['status']=200
     response['tx_hash']=tx_hash
     return JsonResponse(response)
-
-
-
-
-
-
 
 def get_dollar_value(eth_balance, btc_balance):
     cl=Client(settings.API_KEY, settings.API_SECRET)

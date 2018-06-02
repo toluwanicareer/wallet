@@ -131,7 +131,7 @@ def signupView(request):
 
     return JsonResponse(response)
 
-
+@csrf_exempt
 def WalletView(request, coin_symbol):
     rate = Rate.objects.get(id=1)
     user=get_user(request)
@@ -139,7 +139,7 @@ def WalletView(request, coin_symbol):
     transactions = list(Transaction.objects.only('hash','amount').filter(wallet=wallet).values()[:4])
     #data = serializers.serialize("json", transactions, fields=('hash', 'amount', 'payin'))
 
-    #pdb.set_trace()
+    #pdb.set_trace() 
     if coin_symbol ==settings.ETH:
         try:
             balance=wallet.main_balance/settings.WEI
@@ -147,19 +147,19 @@ def WalletView(request, coin_symbol):
             dollar=round(balance/rate.eth, 2)
 
         except:
-            balance=0
-            dollar=0
+            balance='0'
+            dollar='0'
     if coin_symbol==settings.BTC:
         try:
             balance = wallet.main_balance / settings.BTC
             balance = round(balance, 2)
             dollar=round(balance/rate.eth,2)
         except:
-            balance = 0
-            dollar =0
+            balance = '0'
+            dollar ='0'
     if coin_symbol=='MAN':
         balance=wallet.main_balance
-        dollar=0
+        dollar='0'
     data={'balance': balance,
      'coin_symbol': wallet.coin,
      'id': wallet.id,
@@ -167,9 +167,7 @@ def WalletView(request, coin_symbol):
       'transactions':transactions,
           'status':200,
           'message':'Successful'
-
-
-          }
+ }
     return JsonResponse(data)
 
 def get_wallet(wallet, user):

@@ -145,7 +145,7 @@ def WalletView(request, coin_symbol):
             balance=wallet.main_balance/settings.WEI
             balance=round(balance,2)
             #pdb.set_trace()
-            dollar=round((balance)/float(rate.eth), 2)
+            dollar=str(round((balance)/float(rate.eth), 2))
 
 
         except:
@@ -155,7 +155,7 @@ def WalletView(request, coin_symbol):
         try:
             balance = wallet.main_balance / settings.BTC
             balance = round(balance, 2)
-            dollar=round(balance/float(rate.eth),2)
+            dollar=str(round(balance/float(rate.eth),2))
         except:
             balance = '0'
             dollar ='0'

@@ -130,7 +130,6 @@ def signupView(request):
         response['message'] = 'Email already exist'
 
     return JsonResponse(response)
-
 @csrf_exempt
 def WalletView(request, coin_symbol):
     rate = Rate.objects.get(id=1)
@@ -185,13 +184,15 @@ def chk_email(email):
 
 @csrf_exempt
 def send_coin(request,coin_symbol):
-    user=get_user(request)
+    #user=get_user(request)
     payload = request.body.decode("utf-8")
     data = json.loads(payload)
     response = {'status': 400}
     coin=coin_symbol
     amount=data.get('amount')
     addr=data.get('address')
+    id=data.get('id')
+    user = User.objects.get(id=id)
     wallet = get_wallet(coin_symbol, user)
     addresses = wallet.address_set.all()
     if coin == settings.BTC:

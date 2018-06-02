@@ -147,7 +147,6 @@ def WalletView(request, coin_symbol):
             #pdb.set_trace()
             dollar=str(round((balance)/float(rate.eth), 2))
 
-
         except:
             balance='0'
             dollar='0'

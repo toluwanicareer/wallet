@@ -155,8 +155,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 ETH='beth'
 ETHNETWORK='test'
+SITE='http://tolucareer.pythonanywhere.com/'
 CALLBACK_URL='hook/callback/monitor_transaction'
-WEBHOOK_URL='https://webhook.site/599dea4b-8ac9-4c2e-a400-2c9966c9aacf'#'http://tolucareer.pythonanywhere.com/'+CALLBACK_URL
+WEBHOOK_URL=SITE+CALLBACK_URL
+#'http://tolucareer.pythonanywhere.com/'+CALLBACK_URL
 
 WEI=1000000000000000000
 SATOSHI=100000000

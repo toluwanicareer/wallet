@@ -55,8 +55,8 @@ def dash(request):
 
     id=request.GET.get('id')
     user=User.objects.get(id=id)
-    eth = get_wallet('eth', user)
-    btc = get_wallet('btc', user)
+    eth = get_wallet(settings.ETH, user)
+    btc = get_wallet(settings.BTC, user)
     manna = get_wallet('MAN', user)
     rate=Rate.objects.get(id=1)
     try:
@@ -197,6 +197,7 @@ def send_coin(request,coin_symbol):
     addresses = wallet.address_set.all()
     if coin == settings.BTC:
         amount = int(float(amount) * settings.BTC)
+        amount = int(float(amount) * settings.BTC)
     if coin == settings.ETH:
         amount = int(float(amount) * settings.WEI)
 
@@ -234,7 +235,7 @@ def send_coin(request,coin_symbol):
         response['message'] = 'Insufficient Balance'
         return JsonResponse(response)
 
-    response['message']='Transaction successfully created1'
+    response['message']='Transaction successfully created'
     response['status']=200
     response['tx_hash']=tx_hash
     return JsonResponse(response)
